@@ -19,10 +19,11 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
-#include "printf.h"
+#include "cmsis_os.h"
+
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "printf.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -42,16 +43,20 @@
 /* Private variables ---------------------------------------------------------*/
 UART_HandleTypeDef huart1;
 
-/* USER CODE BEGIN PV */
+osThreadId myTask01Handle;
 
+/* USER CODE BEGIN PV */
+osThreadId myTask02Handle;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_USART1_UART_Init(void);
-/* USER CODE BEGIN PFP */
+void StartTask01(void const * argument);
 
+/* USER CODE BEGIN PFP */
+void StartTask02(void const * argument);
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -92,12 +97,45 @@ int main(void)
 
   /* USER CODE END 2 */
 
+  /* USER CODE BEGIN RTOS_MUTEX */
+  /* add mutexes, ... */
+  /* USER CODE END RTOS_MUTEX */
+
+  /* USER CODE BEGIN RTOS_SEMAPHORES */
+  /* add semaphores, ... */
+  /* USER CODE END RTOS_SEMAPHORES */
+
+  /* USER CODE BEGIN RTOS_TIMERS */
+  /* start timers, add new ones, ... */
+  /* USER CODE END RTOS_TIMERS */
+
+  /* USER CODE BEGIN RTOS_QUEUES */
+  /* add queues, ... */
+  /* USER CODE END RTOS_QUEUES */
+
+  /* Create the thread(s) */
+  /* definition and creation of defaultTask */
+
+  /* definition and creation of myTask01 */
+  osThreadDef(myTask01, StartTask01, 3, 0, 128);
+  myTask01Handle = osThreadCreate(osThread(myTask01), NULL);
+
+  /* USER CODE BEGIN RTOS_THREADS */
+  /* add threads, ... */
+  osThreadDef(myTask02, StartTask02, 2, 0, 128);
+   myTask02Handle = osThreadCreate(osThread(myTask02), NULL);
+  /* USER CODE END RTOS_THREADS */
+
+  /* Start scheduler */
+  osKernelStart();
+
+  /* We should never get here as control is now taken by the scheduler */
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
     /* USER CODE END WHILE */
-	  mprintf("Hello World!!");
+
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
@@ -189,8 +227,38 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
-
+void StartTask02(void const * argument)
+{
+  /* USER CODE BEGIN StartTask01 */
+  /* Infinite loop */
+  for(;;)
+  {
+	  mprintf("Task 2");
+    osDelay(1000);
+  }
+}
 /* USER CODE END 4 */
+
+
+
+/* USER CODE BEGIN Header_StartTask01 */
+/**
+* @brief Function implementing the myTask01 thread.
+* @param argument: Not used
+* @retval None
+*/
+/* USER CODE END Header_StartTask01 */
+void StartTask01(void const * argument)
+{
+  /* USER CODE BEGIN StartTask01 */
+  /* Infinite loop */
+  for(;;)
+  {
+	mprintf("Task 1");
+    osDelay(1000);
+  }
+  /* USER CODE END StartTask01 */
+}
 
 /**
   * @brief  Period elapsed callback in non blocking mode
