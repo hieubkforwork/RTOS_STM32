@@ -30,6 +30,7 @@
 #ifndef FREERTOS_CONFIG_H
 #define FREERTOS_CONFIG_H
 
+#define INCLUDE_eTaskGetState 1
 /*-----------------------------------------------------------
  * Application specific definitions.
  *

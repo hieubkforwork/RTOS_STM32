@@ -4,6 +4,7 @@ tasks.c:824:13:prvInitialiseNewTask	40	static,ignoring_inline_asm
 tasks.c:1077:13:prvAddNewTaskToReadyList	16	static,ignoring_inline_asm
 tasks.c:1162:7:vTaskDelete	24	static,ignoring_inline_asm
 tasks.c:1341:7:vTaskDelay	24	static,ignoring_inline_asm
+tasks.c:1386:13:eTaskGetState	40	static,ignoring_inline_asm
 tasks.c:1478:14:uxTaskPriorityGet	24	static
 tasks.c:1500:14:uxTaskPriorityGetFromISR	40	static,ignoring_inline_asm
 tasks.c:1540:7:vTaskPrioritySet	40	static,ignoring_inline_asm

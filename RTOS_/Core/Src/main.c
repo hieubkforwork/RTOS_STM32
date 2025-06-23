@@ -227,13 +227,19 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
+eTaskState state1, state2;
+
 void StartTask02(void const * argument)
 {
   /* USER CODE BEGIN StartTask01 */
   /* Infinite loop */
   for(;;)
   {
-	  mprintf("Task 2");
+	  state1= eTaskGetState((TaskHandle_t)myTask01Handle);
+	  state2= eTaskGetState((TaskHandle_t)myTask02Handle);
+	  mprintf("State Task 1: %d\n",state1);
+	  mprintf("State Task 2: %d\n",state2);
+
     osDelay(1000);
   }
 }
@@ -254,8 +260,8 @@ void StartTask01(void const * argument)
   /* Infinite loop */
   for(;;)
   {
-	mprintf("Task 1");
-    osDelay(1000);
+	mprintf("Task 1\n");
+    osDelay(10000);
   }
   /* USER CODE END StartTask01 */
 }
