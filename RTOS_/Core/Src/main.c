@@ -43,16 +43,20 @@
 /* Private variables ---------------------------------------------------------*/
 UART_HandleTypeDef huart1;
 
+osThreadId defaultTaskHandle;
 osThreadId myTask01Handle;
-
+osMessageQId myQueue01Handle;
 /* USER CODE BEGIN PV */
 osThreadId myTask02Handle;
+
+osMailQId myQueue1Handle;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_USART1_UART_Init(void);
+void StartDefaultTask(void const * argument);
 void StartTask01(void const * argument);
 
 /* USER CODE BEGIN PFP */
@@ -61,7 +65,11 @@ void StartTask02(void const * argument);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-
+typedef struct {
+	  uint32_t data1;
+	  uint8_t header;
+	  uint8_t counter;
+} DataType;
 /* USER CODE END 0 */
 
 /**
@@ -109,15 +117,24 @@ int main(void)
   /* start timers, add new ones, ... */
   /* USER CODE END RTOS_TIMERS */
 
+  /* Create the queue(s) */
+  /* definition and creation of myQueue01 */
+  //osMessageQDef(myQueue01, 16, uint32_t);
+  osMailQDef(myQueue1,16,DataType);
+  //myQueue01Handle = osMessageCreate(osMessageQ(myQueue01), NULL);
+  myQueue1Handle = osMailCreate(osMailQ(myQueue1), NULL);
+
   /* USER CODE BEGIN RTOS_QUEUES */
   /* add queues, ... */
   /* USER CODE END RTOS_QUEUES */
 
   /* Create the thread(s) */
   /* definition and creation of defaultTask */
+  osThreadDef(defaultTask, StartDefaultTask, osPriorityNormal, 0, 128);
+  defaultTaskHandle = osThreadCreate(osThread(defaultTask), NULL);
 
   /* definition and creation of myTask01 */
-  osThreadDef(myTask01, StartTask01, 3, 0, 128);
+  osThreadDef(myTask01, StartTask01, osPriorityNormal, 0, 128);
   myTask01Handle = osThreadCreate(osThread(myTask01), NULL);
 
   /* USER CODE BEGIN RTOS_THREADS */
@@ -231,15 +248,37 @@ void StartTask02(void const * argument)
 {
   /* USER CODE BEGIN StartTask01 */
   /* Infinite loop */
+	osEvent data;
+	DataType*p;
   for(;;)
   {
-	  mprintf("Task 2");
-    osDelay(1000);
+	 // GET DATA
+	  mprintf("Task2 Running\n");
+	  data = osMailGet(myQueue1Handle, osWaitForever);
+	  p = (DataType*)data.value.p;
+	  mprintf("Data: %#x\n", p->data1);
+	  osDelay(1000);
   }
 }
 /* USER CODE END 4 */
 
+/* USER CODE BEGIN Header_StartDefaultTask */
+/**
+  * @brief  Function implementing the defaultTask thread.
+  * @param  argument: Not used
+  * @retval None
+  */
+/* USER CODE END Header_StartDefaultTask */
+void StartDefaultTask(void const * argument)
+{
+  /* USER CODE BEGIN 5 */
+  /* Infinite loop */
+  for(;;)
+  {
 
+  }
+  /* USER CODE END 5 */
+}
 
 /* USER CODE BEGIN Header_StartTask01 */
 /**
@@ -252,13 +291,23 @@ void StartTask01(void const * argument)
 {
   /* USER CODE BEGIN StartTask01 */
   /* Infinite loop */
+	  DataType * data = osMailAlloc(myQueue1Handle, 100);
+	  data->data1=0x12345678;
+	  data->counter=0x0;
+	  data->header=0x1;
   for(;;)
   {
-	mprintf("Task 1");
-    osDelay(1000);
+	  mprintf("Task1 Running\n");
+	  osMailPut(myQueue1Handle,data);
+	      osDelay(5000);
   }
-  /* USER CODE END StartTask01 */
 }
+/* USER CODE END 4 */
+
+
+
+
+
 
 /**
   * @brief  Period elapsed callback in non blocking mode
