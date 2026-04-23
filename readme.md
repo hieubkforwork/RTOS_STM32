@@ -1,33 +1,33 @@
-# 📌 Quản lý bộ nhớ Heap trong RTOS
+# Quản lý bộ nhớ Heap trong RTOS
 
 ![img](mem.png)
-## 📖 Giới thiệu
+## Giới thiệu
 
 Trong các hệ điều hành RTOS, việc **cấp phát và quản lý bộ nhớ Heap** cực kỳ quan trọng. Nó ảnh hưởng trực tiếp đến:
 - Hiệu suất hệ thống.
 - Tính ổn định và **khả năng đáp ứng thời gian thực**.
 - Khả năng **tạo và hủy các Task, Semaphore, Queue, Mutex** khi chạy.
 
-## ⚙️ Phân loại cấp phát bộ nhớ
+## Phân loại cấp phát bộ nhớ
 
-### 1️⃣ Cấp phát tĩnh (Static Allocation)
+### Cấp phát tĩnh (Static Allocation)
 - Bộ nhớ được cấp phát cố định khi biên dịch.
-- ✅ Ưu điểm: Đơn giản, ổn định, không phân mảnh.
-- ❌ Nhược điểm: Thiếu linh hoạt, dễ lãng phí nếu không dùng hết.
+- Ưu điểm: Đơn giản, ổn định, không phân mảnh.
+- Nhược điểm: Thiếu linh hoạt, dễ lãng phí nếu không dùng hết.
 
-### 2️⃣ Cấp phát động (Dynamic Allocation)
+### Cấp phát động (Dynamic Allocation)
 - Bộ nhớ được cấp phát khi chạy (runtime).
-- ✅ Ưu điểm: Linh hoạt, dễ tạo & xóa Task, Queue.
-- ❌ Nhược điểm: Dễ gây phân mảnh, phải đảm bảo thread-safe.
+- Ưu điểm: Linh hoạt, dễ tạo & xóa Task, Queue.
+- Nhược điểm: Dễ gây phân mảnh, phải đảm bảo thread-safe.
 
-> ⚠️ **Lưu ý:** Không nên dùng `malloc()` / `free()` chuẩn C vì:
+> **Lưu ý:** Không nên dùng `malloc()` / `free()` chuẩn C vì:
 > - Không đảm bảo thread-safe.
 > - Không kiểm soát được thời gian thực thi.
 > - Thay vào đó, FreeRTOS dùng `pvPortMalloc()` và `vPortFree()`.
 
 ---
 
-## 🗂️ Các phương pháp quản lý Heap trong FreeRTOS
+## Các phương pháp quản lý Heap trong FreeRTOS
 
 | Phương pháp | Mô tả | Ưu điểm | Nhược điểm |
 |-------------|-------|---------|-------------|
@@ -39,7 +39,7 @@ Trong các hệ điều hành RTOS, việc **cấp phát và quản lý bộ nh�
 
 ---
 
-## ✅ Kết luận
+## Kết luận
 
 - **Chọn cách quản lý Heap phù hợp** với tài nguyên RAM & yêu cầu thời gian thực.
 - Với ứng dụng đơn giản, Heap_1 hoặc Heap_2 đủ dùng.
