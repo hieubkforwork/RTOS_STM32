@@ -1,4 +1,4 @@
-# Message Queue / Mail Queue
+# Message Queue
 
 ## 1. Lý thuyết
 Hàng đợi (queue) là hình thức chính giao tiếp giữa các tác vụ (task). Chúng có thể được sử dụng để gởi tin nhắn (message) giữa các task với nhau và giữa các task với các ngắt (interrupt). Trong hầu hết trường hợp, chúng được sử dụng làm bộ đệm FIFO (First In First Out) an toàn cho luồng (thread safe FIFO buffer) với dữ liệu mới được gởi tới phía sau của queue, mặc dù dữ liệu cũng có thể được gởi tới phía trước.
@@ -39,17 +39,6 @@ Queue API
 | Allocate memory block for mail queue                   | `osMailAlloc`       |
 | Free memory for mail queue                             | `osMailFree`        |
 
-Mail API
-| **Tính năng**                                         | **RTOS API**     |
-|-------------------------------------------------------|------------------|
-| Tạo hàng đợi thư                                      | `osMailCreate`   |
-| Lấy thư (blocking hoặc timeout)                       | `osMailGet`      |
-| Gửi thư                                               | `osMailPut`      |
-| Cấp phát bộ nhớ cho thư                               | `osMailAlloc`    |
-| Giải phóng bộ nhớ thư                                 | `osMailFree`     |
-| Nhận thư mà không xoá khỏi hàng đợi (không hỗ trợ v1) | *Not Available*  |
-
-> 📎 **Lưu ý**: CMSIS-RTOS v1 không hỗ trợ `osMailPeek`. Nếu cần tính năng xem trước thư mà không xoá khỏi hàng đợi, bạn có thể xem xét sử dụng Message Queue thay thế.
 
 ## 2. Code Message Queue
 ![Demo](img/cube.png)
