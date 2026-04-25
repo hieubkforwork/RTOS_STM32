@@ -16,5 +16,5 @@ void mprintf(const char* format,...){
 	vsnprintf(buff,sizeof(buff), format,args);
 	va_end(args);
 
-	HAL_UART_Transmit(&huart1, (uint8_t*)buff, 40, 1000);
+			HAL_UART_Transmit(&huart1, (uint8_t*)buff, 40, 1000);
 }
