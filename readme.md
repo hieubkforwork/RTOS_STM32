@@ -47,14 +47,15 @@ int main(void)
 }
 ```
 **Output**
-```cpp
+``` cpp
 Task B: Waiting for semaphore...
 Task A: Doing work...
 Task A: Done -> Give semaphore
 Task B: Got semaphore -> Continue work
 ```
 ---
-
+**Mutex**
+``` cpp
 SemaphoreHandle_t mutex;
 
 void TaskA(void *param)
@@ -88,7 +89,7 @@ int main(void)
 
     vTaskStartScheduler();
 }
-
+```
 **Output**
 ```cpp
 Task B: Waiting for mutex...
